@@ -91,7 +91,7 @@
  #include "ui/accessibility/accessibility_features.h"
  #include "ui/base/ui_base_features.h"
  #include "ui/events/blink/blink_features.h"
-@@ -442,6 +443,10 @@ void SetRuntimeFeaturesFromCommandLine(c
+@@ -453,6 +454,10 @@ void SetRuntimeFeaturesFromCommandLine(c
         switches::kEnableWebGPUDeveloperFeatures, true},
        {wrf::EnableDirectSockets, switches::kEnableIsolatedWebAppsInRenderer,
         true},
@@ -311,7 +311,7 @@
  }  // namespace blink
 --- a/third_party/blink/renderer/platform/runtime_enabled_features.json5
 +++ b/third_party/blink/renderer/platform/runtime_enabled_features.json5
-@@ -1758,6 +1758,12 @@
+@@ -1764,6 +1764,12 @@
        origin_trial_feature_name: "Focusgroup",
      },
      {
