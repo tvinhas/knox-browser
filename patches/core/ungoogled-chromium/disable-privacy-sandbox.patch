@@ -1,0 +1,91 @@
+--- a/components/privacy_sandbox/privacy_sandbox_prefs.cc
++++ b/components/privacy_sandbox/privacy_sandbox_prefs.cc
+@@ -108,7 +108,7 @@ namespace privacy_sandbox {
+ 
+ void RegisterProfilePrefs(PrefRegistrySimple* registry) {
+   registry->RegisterBooleanPref(
+-      prefs::kPrivacySandboxApisEnabled, true,
++      prefs::kPrivacySandboxApisEnabled, false,
+       user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterBooleanPref(prefs::kPrivacySandboxApisEnabledV2, false);
+   registry->RegisterBooleanPref(prefs::kPrivacySandboxM1ConsentDecisionMade,
+--- a/components/privacy_sandbox/privacy_sandbox_settings_impl.cc
++++ b/components/privacy_sandbox/privacy_sandbox_settings_impl.cc
+@@ -70,7 +70,7 @@ base::Value::Dict CreateBlockedTopicEntr
+ 
+ // static
+ bool PrivacySandboxSettingsImpl::IsAllowed(Status status) {
+-  return status == Status::kAllowed;
++  return false;
+ }
+ 
+ PrivacySandboxSettingsImpl::PrivacySandboxSettingsImpl(
+@@ -512,20 +512,7 @@ bool PrivacySandboxSettingsImpl::IsPriva
+ }
+ 
+ bool PrivacySandboxSettingsImpl::IsPrivacySandboxEnabled() const {
+-  PrivacySandboxSettingsImpl::Status status = GetPrivacySandboxAllowedStatus();
+-  if (!IsAllowed(status)) {
+-    return false;
+-  }
+-
+-  // For Measurement and Relevance APIs, we explicitly do not require the
+-  // underlying pref to be enabled if there is a local flag enabling the APIs to
+-  // allow for local testing.
+-  if (base::FeatureList::IsEnabled(
+-          privacy_sandbox::kOverridePrivacySandboxSettingsLocalTesting)) {
+-    return true;
+-  }
+-
+-  return pref_service_->GetBoolean(prefs::kPrivacySandboxApisEnabledV2);
++  return false;
+ }
+ 
+ void PrivacySandboxSettingsImpl::SetAllPrivacySandboxAllowedForTesting() {
+@@ -550,11 +537,10 @@ void PrivacySandboxSettingsImpl::SetTopi
+ }
+ 
+ void PrivacySandboxSettingsImpl::SetPrivacySandboxEnabled(bool enabled) {
+-  pref_service_->SetBoolean(prefs::kPrivacySandboxApisEnabledV2, enabled);
+ }
+ 
+ bool PrivacySandboxSettingsImpl::IsPrivacySandboxRestricted() const {
+-  return delegate_->IsPrivacySandboxRestricted();
++  return true;
+ }
+ 
+ bool PrivacySandboxSettingsImpl::IsPrivacySandboxCurrentlyUnrestricted() const {
+@@ -657,11 +643,7 @@ PrivacySandboxSettingsImpl::GetPrivacySa
+     return Status::kIncognitoProfile;
+   }
+ 
+-  if (IsPrivacySandboxRestricted() && !should_ignore_restriction) {
+     return Status::kRestricted;
+-  }
+-
+-  return Status::kAllowed;
+ }
+ 
+ PrivacySandboxSettingsImpl::Status
+--- a/content/browser/aggregation_service/aggregation_service_features.cc
++++ b/content/browser/aggregation_service/aggregation_service_features.cc
+@@ -9,7 +9,7 @@ namespace content {
+ // Enables the Aggregation Service. See crbug.com/1207974.
+ BASE_FEATURE(kPrivacySandboxAggregationService,
+              "PrivacySandboxAggregationService",
+-             base::FEATURE_ENABLED_BY_DEFAULT);
++             base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ const base::FeatureParam<std::string>
+     kPrivacySandboxAggregationServiceTrustedServerUrlAwsParam{
+--- a/third_party/blink/common/features.cc
++++ b/third_party/blink/common/features.cc
+@@ -137,7 +137,7 @@ BASE_FEATURE(kBlockingDownloadsInAdFrame
+ // Controls whether the Conversion Measurement API infrastructure is enabled.
+ BASE_FEATURE(kConversionMeasurement,
+              "ConversionMeasurement",
+-             base::FEATURE_ENABLED_BY_DEFAULT);
++             base::FEATURE_DISABLED_BY_DEFAULT);
+ 
+ // Controls whether LCP calculations should exclude low-entropy images. If
+ // enabled, then the associated parameter sets the cutoff, expressed as the
