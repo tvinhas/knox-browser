@@ -26,5 +26,4 @@ extra/iridium-browser/prefs-always-prompt-for-download-directory-by-defaul.patch
 extra/iridium-browser/updater-disable-auto-update.patch
 extra/iridium-browser/Remove-EV-certificates.patch
 extra/iridium-browser/browser-disable-profile-auto-import-on-first-run.patch
-extra/bromite/flag-fingerprinting-canvas-image-data-noise.patch
 
