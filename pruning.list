@@ -7940,7 +7940,6 @@ third_party/dawn/third_party/webgpu-cts/src/resources/four-colors-vp9-bt601.webm
 third_party/dawn/third_party/webgpu-cts/src/resources/four-colors-vp9-bt709.webm
 third_party/devtools-frontend/src/node_modules/tar-fs/test/fixtures/invalid.tar
 third_party/devtools-frontend/src/node_modules/terser/node_modules/source-map/lib/mappings.wasm
-third_party/devtools-frontend/src/test/e2e/resources/media/corrupt.webm
 third_party/devtools-frontend/src/test/e2e/resources/media/fisch.webm
 third_party/devtools-frontend/src/test/e2e/resources/network/webbundle.wbn
 third_party/devtools-frontend/src/test/e2e/resources/network/webbundle_bad_inner_request.wbn
